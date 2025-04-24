@@ -1,5 +1,8 @@
 
-table = [[' ' for _ in range(7)] for _ in range(6)]
+table = []
+for _ in range(6):
+    row = [' ' for _ in range(7)]
+    table.append(row)
 
 def drop_coin():
     pass
