@@ -1,4 +1,4 @@
-#! /usr/bin/Team4_Connect_4_Agent.py 
+#! /usr/bin/Team2_Connect_4_Agent.py 
 
 # IMPORTS
 import random
