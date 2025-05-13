@@ -168,18 +168,14 @@ def connect_4_result(board, winner, looser):
     the values of winner = looser = 'Draw'."""
 
     # Check if a draw
+    print(">>> I am player TEAM2 <<<")
     if winner == "Draw":
-        print(">>> I am player TEAM2 <<<")
         print(">>> The game resulted in a draw. <<<\n")
         return True
-
-    print(">>> I am player TEAM2 <<<")
-    print("The winner is " + winner)
     if winner == "Team2":
         print("YEAH!!  :-)")
     else:
         print("BOO HOO HOO  :~(")
-    print("The looser is " + looser)
     print()
 
     # print("The final board is")   # Uncomment if you want to print the game board.
