@@ -225,7 +225,7 @@ def connect_4_result(board, winner, looser):
         total_time = game_end_time - game_start_time
         minutes = int(total_time // 60)
         seconds = int(total_time % 60)
-        print(f"\u23F1 Total runtime for TeamEric: {minutes} min {seconds} sec")
+        print(f"Total runtime for TeamEric: {minutes} min {seconds} sec")
     else:
         print("game_start_time not set properly!")
 
