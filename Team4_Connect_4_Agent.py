@@ -13,16 +13,24 @@ game_end_time = None
 
 # HELPER FUNCTIONS
 def print_board(board):
+    """ Prints the connect 4 game board."""
+    # Representation: Display the current state of game board
     for row in board:
         print('|' + '|'.join(row) + '|')
     print("-" * (len(board[0]) * 2 + 1))
     print(' ' + ' '.join(str(i+1) for i in range(len(board[0]))))
 
 def board_to_key(board, maximizingPlayer):
+    """ Converts the current board state to a unique key.
+    James Jian: 100% implement hashing function to uniquely identify the board state
+    """
     key = ''.join(''.join(row) for row in board) + str(maximizingPlayer)
     return hashlib.md5(key.encode()).hexdigest()
 
 def make_move(board, col, piece):
+    """ Makes a move on the board by placing piece in selected column.
+    Michael Chu: 100% implement the logic to make a move by finding next available row.
+    """
     for row in reversed(range(num_rows)):
         if board[row][col] == ' ':
             board[row][col] = piece
@@ -30,9 +38,14 @@ def make_move(board, col, piece):
     return -1
 
 def undo_move(board, row, col):
+    """Undoes last move made on the board 
+    Michael Chu: 100% implmemnted to revert move on board by setting the cell to empty
+    """
     board[row][col] = ' '
 
 def init_agent(player_symbol, board_num_rows, board_num_cols, board):
+    """Initializes the agent with the player's symbol, board dimensions, and board state.
+    """
     global num_rows, num_cols, my_game_symbol, opponent_piece, game_start_time
     my_game_symbol = player_symbol
     opponent_piece = 'X' if my_game_symbol == 'O' else 'O'
@@ -42,12 +55,20 @@ def init_agent(player_symbol, board_num_rows, board_num_cols, board):
     return True
 
 def is_valid_location(board, col):
+    """Checks if column is valid location for move
+    Eric Nguyen: 100% implmented to ensure move made only in available column"""
     return board[0][col] == ' '
 
 def get_valid_locations(board):
+    """Returns list of valid columns where move can be made
+    Amy Do: 100% implmeneted to gather all available columns for a move"""
     return [c for c in range(num_cols) if is_valid_location(board, c)]
 
 def get_ordered_valid_locations(board, depth):
+    """ Returns valid columns ordered by potential threats and preferences.
+    Eric Nguyen: 50% Implemented to order columns based on winning move potential.
+    James Jian: 50% Enhanced with center prioritization and killer move tracking.
+    """
     valid_cols = get_valid_locations(board)
     ordered_cols = []
     for col in valid_cols:
@@ -71,6 +92,9 @@ def get_ordered_valid_locations(board, depth):
     return ordered_cols
 
 def winning_move(board, piece):
+    """ Checks if a player has made a winning move.
+    Amy Do: 100% Implemented to check horizontal, vertical, and diagonal wins.
+    """
     for c in range(num_cols - 3):
         for r in range(num_rows):
             if all(board[r][c+i] == piece for i in range(4)):
@@ -90,6 +114,9 @@ def winning_move(board, piece):
     return False
 
 def score_window(window, piece):
+    """ Scores a window of 4 pieces for a potential move.
+    Eric Nguyen: 100% Implemented to score the strength of a window of 4 consecutive pieces.
+    """
     score = 0
     opp = opponent_piece
     if window.count(piece) == 4:
@@ -107,6 +134,9 @@ def score_window(window, piece):
     return score
 
 def score_position(board, piece):
+    """ Scores the entire board for a given piece.
+    Amy Do: 100% Implemented to evaluate the overall strength of the board.
+    """
     score = 0
     center_col = [board[r][num_cols//2] for r in range(num_rows)]
     score += center_col.count(piece) * 5
@@ -128,6 +158,14 @@ def score_position(board, piece):
     return score
 
 def minimax(board, depth, alpha, beta, maximizingPlayer):
+    """ Minimax algorithm with Alpha-Beta Pruning.
+    Eric Nguyen: 50% Implemented the Minimax search algorithm with pruning.
+    James Jian: 50% Enhanced with transposition table and killer move heuristic.
+    """
+    # Main entry to Search method
+    # Search is performed by recursively exploring all possible moves and evaluating them
+    # using a heuristic score. Alpha-Beta Pruning is used to optimize the search.
+
     board_key = board_to_key(board, maximizingPlayer)
     valid_locations = get_ordered_valid_locations(board, depth)
     is_terminal = winning_move(board, my_piece) or winning_move(board, opponent_piece) or len(valid_locations) == 0
@@ -179,6 +217,13 @@ def minimax(board, depth, alpha, beta, maximizingPlayer):
         return best_col, value
 
 def what_is_your_move(board, game_rows, game_cols, my_game_symbol):
+    """ Main function to determine the best move using Minimax.
+    James Jian: 40% Overall design and logic of selecting the best move.
+    Eric Nguyen: 30% Implemented Alpha-Beta pruning and optimized the search loop.
+    Michael Chu: 30% Enhanced logic for handling game start time and random moves.
+    """
+    # Main entry to Reasoning method
+    # Reasoning here involves choosing the best move based on the Minimax search results.
     global num_rows, num_cols, my_piece, opponent_piece
     num_rows = game_rows
     num_cols = game_cols
@@ -217,6 +262,9 @@ def what_is_your_move(board, game_rows, game_cols, my_game_symbol):
     return best_col + 1
 
 def connect_4_result(board, winner, looser):
+    """ Prints the result of the game.
+    Michael Chu: 100% Implemented to track the total runtime.
+    """
     global game_end_time
     game_end_time = time.time()
     if game_start_time is not None:
